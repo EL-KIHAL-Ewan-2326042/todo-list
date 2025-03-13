@@ -1,0 +1,148 @@
+.welcome-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.welcome-modal {
+    background-color: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    animation: welcome-modal-appear 0.4s ease-out;
+}
+
+@keyframes welcome-modal-appear {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.welcome-modal-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.welcome-modal-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.welcome-modal-body {
+    padding: 25px;
+}
+
+.welcome-modal-body p {
+    margin-top: 0;
+    color: #555;
+    font-size: 16px;
+}
+
+.welcome-options {
+    display: flex;
+    gap: 25px;
+    margin-top: 25px;
+}
+
+@media (max-width: 768px) {
+    .welcome-options {
+        flex-direction: column;
+    }
+}
+
+.welcome-option {
+    flex: 1;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.2s;
+    justify-content: space-between;
+    height: auto;
+}
+
+.welcome-option:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-option h3, .welcome-option p {
+    width: 100%;
+}
+
+.welcome-option h3 {
+    color: #333;
+}
+
+.welcome-option p {
+    color: #666;
+    flex-grow: 1;
+}
+
+.import-button, .start-fresh-button {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-weight: 500;
+    width: 80%;
+    text-align: center;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.import-button {
+    background-color: #1976d2;
+    color: #ffffff;
+}
+
+.import-button:hover {
+    background-color: #0d47a1;
+}
+
+.start-fresh-button {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+
+.start-fresh-button:hover {
+    background-color: #388e3c;
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.welcome-option > div:first-child {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+    height: 150px;
+}
