@@ -8,7 +8,6 @@ const CalendarView = ({ tasks, toggleTask, deleteTask, updateTask, getCategories
     const [selectedDate, setSelectedDate] = useState(null);
     const [tasksByDate, setTasksByDate] = useState({});
 
-    // Organiser les tâches par date d'échéance
     useEffect(() => {
         const taskMap = {};
         tasks.forEach(task => {

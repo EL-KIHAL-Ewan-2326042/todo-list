@@ -71,7 +71,6 @@ function AddCategory({ addCategory, isEditing = false, categoryToEdit = null, on
         });
 
         if (!isEditing) {
-            // Reset form only when adding, not editing
             setFormData({
                 title: '',
                 description: '',
@@ -79,7 +78,6 @@ function AddCategory({ addCategory, isEditing = false, categoryToEdit = null, on
                 icon: 'home'
             });
         } else if (onCancel) {
-            // Close modal when editing
             onCancel();
         }
     };

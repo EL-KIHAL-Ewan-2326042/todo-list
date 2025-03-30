@@ -13,12 +13,10 @@ function ModifyCategory({ categories, updateCategory: propUpdateCategory, delete
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [message, setMessage] = useState(null);
 
-    // Local implementations if props are not provided
     const updateCategory = (updatedCategory) => {
         if (typeof propUpdateCategory === 'function') {
             propUpdateCategory(updatedCategory);
         } else {
-            // Implement local update
             const data = todoStorage.loadData() || { categories: [] };
             const updatedCategories = data.categories.map(cat =>
                 cat.id === updatedCategory.id ? updatedCategory : cat
@@ -31,7 +29,7 @@ function ModifyCategory({ categories, updateCategory: propUpdateCategory, delete
 
             setMessage({ type: 'success', text: 'Catégorie mise à jour avec succès' });
             setTimeout(() => setMessage(null), 3000);
-            window.location.reload(); // Reload to see changes
+            window.location.reload();
         }
     };
 
@@ -39,7 +37,6 @@ function ModifyCategory({ categories, updateCategory: propUpdateCategory, delete
         if (typeof propDeleteCategory === 'function') {
             propDeleteCategory(categoryId);
         } else {
-            // Implement local delete
             const data = todoStorage.loadData() || { categories: [] };
             const updatedCategories = data.categories.filter(cat => cat.id !== categoryId);
 
@@ -50,7 +47,7 @@ function ModifyCategory({ categories, updateCategory: propUpdateCategory, delete
 
             setMessage({ type: 'success', text: 'Catégorie supprimée avec succès' });
             setTimeout(() => setMessage(null), 3000);
-            window.location.reload(); // Reload to see changes
+            window.location.reload();
         }
     };
 

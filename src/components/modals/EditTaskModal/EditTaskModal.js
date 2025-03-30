@@ -4,7 +4,7 @@ import Modal from '../modal';
 import '../ConfirmModal/ConfirmModal.css';
 import './EditTaskModal.css';
 
-function EditTaskModal({ isOpen, todo, categories, onUpdate, onDelete, onClose }) {
+function EditTaskModal({ isOpen, todo, categories, onUpdate, onClose }) {
     if (!isOpen) return null;
 
     const handleSubmit = (updatedTodo) => {

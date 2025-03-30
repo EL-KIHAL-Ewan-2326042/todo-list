@@ -1,8 +1,7 @@
 import React from 'react';
 import './ActiveFilters.css';
 
-function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearFilters, removeContact }) {
-    // Check if any filter is active
+function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearFilters }) {
     const hasActiveFilters = () => {
         return searchQuery ||
             filter.status !== 'all' ||
@@ -13,12 +12,10 @@ function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearF
             filter.dueDateTarget;
     };
 
-    // Skip rendering if no filters are active
     if (!hasActiveFilters()) {
         return null;
     }
 
-    // Get category names from IDs
     const getCategoryNames = () => {
         if (!filter.selectedCategories || !filter.selectedCategories.length || !categories) return [];
         return filter.selectedCategories.map(id => {
@@ -27,21 +24,17 @@ function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearF
         }).filter(Boolean);
     };
 
-    // Format filter information text
     const getFilterText = () => {
         const parts = [];
 
-        // Status filter
         if (filter.status !== 'all') {
             parts.push(`Statut: ${filter.status === 'active' ? 'En cours' : 'Terminées'}`);
         }
 
-        // Search query
         if (searchQuery) {
             parts.push(`Recherche: "${searchQuery}"`);
         }
 
-        // Sort method
         const sortMethods = {
             'name': 'Nom',
             'date': 'Date de création',
@@ -53,7 +46,6 @@ function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearF
             parts.push(`Trié par: ${sortMethods[activeFilter] || activeFilter}`);
         }
 
-        // Date filters
         if (filter.createDateTarget) {
             const direction = filter.createDateDirection === '>' ? 'après' : 'avant';
             parts.push(`Créé ${direction} le: ${filter.createDateTarget}`);
@@ -64,13 +56,11 @@ function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearF
             parts.push(`Échéance ${direction} le: ${filter.dueDateTarget}`);
         }
 
-        // Categories
         const categoryNames = getCategoryNames();
         if (categoryNames.length > 0) {
             parts.push(`Catégories: ${categoryNames.join(', ')}`);
         }
 
-        // Contacts
         if (filter.selectedContacts && filter.selectedContacts.length > 0) {
             parts.push(`Contacts: ${filter.selectedContacts.join(', ')}`);
         }

@@ -78,7 +78,6 @@
     top: 30px;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .filter-modal {
         width: 95%;
