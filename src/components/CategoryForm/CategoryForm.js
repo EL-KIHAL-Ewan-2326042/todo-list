@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CategoryForm.css';
-import { getCategoryStyle, getCategoryBackgroundColor } from '../utils/colorUtils';
+import { getCategoryStyle, getCategoryBackgroundColor } from '../../utils/colorUtils';
 
 function CategoryForm({ addCategory, categories }) {
     const [formData, setFormData] = useState({

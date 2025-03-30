@@ -1,0 +1,102 @@
+.task-modal-container {
+    background-color: white;
+    width: 90%;
+    max-width: 600px;
+    min-height: auto;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    transform: scale(0.9);
+    opacity: 0;
+    animation: popup-appear 0.3s forwards;
+    position: relative;
+}
+
+.task-modal-container .todo-textarea {
+    width: 100%;
+    height: 25vh;
+    min-height: 120px;
+    max-height: 25vh;
+    box-sizing: border-box;
+    resize: none;
+    overflow-y: auto;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.task-modal-container .modal-body {
+    padding: 1.5rem 2rem;
+}
+
+.task-modal-container .todo-form {
+    padding: 1.25rem;
+    margin: 0;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.task-modal-container .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal-header {
+    background-color: white;
+    z-index: 10;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+
+@keyframes popup-appear {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-overlay.bottom-right {
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.modal-overlay.bottom-right .task-modal-container {
+    position: absolute;
+    right: calc(80px + 1.5rem);
+    bottom: 30px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

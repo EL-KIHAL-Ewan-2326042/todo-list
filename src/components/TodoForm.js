@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DatePicker from './DatePicker';
+import DatePicker from './DatePicker/DatePicker';
 import { getCategoryStyle } from '../utils/colorUtils';
 
 function TodoForm({ addTodo, categories }) {

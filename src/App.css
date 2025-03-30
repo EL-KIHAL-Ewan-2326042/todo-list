@@ -764,25 +764,6 @@
   padding: 15px;
 }
 
-/* Style pour la modale de sélection */
-.selection-modal {
-  position: absolute;
-  right: calc(80px + 1.5rem);
-  bottom: 30px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  overflow-y: auto;
-  animation: popup-appear 0.3s forwards;
-}
-
-.selection-options {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  min-width: 200px;
-}
-
 .option-button {
   display: flex;
   align-items: center;
