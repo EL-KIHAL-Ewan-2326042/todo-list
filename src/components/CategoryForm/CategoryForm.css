@@ -15,7 +15,7 @@
 
 .category-input,
 .category-textarea {
-    width: 100%;
+    width: 95%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -23,17 +23,18 @@
 }
 
 .category-textarea {
-    resize: vertical;
+    resize: none;
 }
 
 .color-selector {
     display: flex;
     flex-flow: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 5px;
+    margin-left: 5px;
 }
 
 .color-option {
@@ -68,6 +69,7 @@
     display: block;
     padding: 10px 15px;
     background-color: #4caf50;
+    width: 100%;
     color: white;
     border: none;
     border-radius: 4px;
@@ -126,4 +128,125 @@
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
+}
+
+.icon-selector {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.icon-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.icon-option input {
+    display: none;
+}
+
+.description {
+    margin-right: 10px;
+}
+
+.icon-preview {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.icon-option input:checked + .icon-preview {
+    box-shadow: 0 0 0 2px #4caf50;
+}
+
+.icon-preview .category-icon {
+    margin-right: 0;
+}
+
+/* Gestion du toggle */
+.category-tabs {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px 15px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.tab-button.active {
+    color: #4caf50;
+    border-bottom: 3px solid #4caf50;
+}
+
+.category-tabs {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.tab-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.tab-button.active {
+    color: #4caf50;
+    border-bottom: 3px solid #4caf50;
+}
+
+.add-category-container,
+.modify-category-container {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+
+.tab-content-container {
+    position: relative;
+    height: 40vh;
+    overflow: hidden;
+}
+
+.tab-content {
+    animation: fadeSlideIn 0.3s ease forwards;
+    width: 100%;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
