@@ -7,7 +7,7 @@ import './TodoItem.css';
 import CategoryList from '../CategoryList/CategoryList';
 import EditTaskModal from '../modals/EditTaskModal/EditTaskModal';
 
-function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCategoryClick }) {
+function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCategoryClick, onContactClick }) {
     const [showDetails, setShowDetails] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -18,6 +18,15 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
         }
         if (onCategoryClick) {
             onCategoryClick(category);
+        }
+    };
+
+    const handleContactClick = (contactName, e) => {
+        if (e) {
+            e.stopPropagation();
+        }
+        if (onContactClick) {
+            onContactClick(contactName);
         }
     };
 
@@ -223,7 +232,14 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
                             <h4>Contacts</h4>
                             <ul>
                                 {todo.contacts.map((contact, index) => (
-                                    <li key={index}>{contact.name}</li>
+                                     <li
+                                         key={index}
+                                         onClick={(e) => handleContactClick(contact.name, e)}
+                                         className="clickable-contact"
+                                         title="Cliquez pour filtrer par ce contact"
+                                     >
+                                         {contact.name}
+                                     </li>
                                 ))}
                             </ul>
                         </div>
@@ -237,7 +253,7 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
                 message={`Êtes-vous sûr de vouloir supprimer la tâche "${todo.title}" ?`}
                 onConfirm={confirmDelete}
                 onCancel={() => setShowDeleteModal(false)}
-                />
+             />
 
             <EditTaskModal
                 isOpen={showEditModal}

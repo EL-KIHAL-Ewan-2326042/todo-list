@@ -43,7 +43,8 @@ function App() {
     endDate: null,
     createDateDirection: '>',
     dueDateDirection: '<',
-    selectedCategories: []
+    selectedCategories: [],
+    selectedContacts: []
   });
 
   const [formMode, setFormMode] = useState('task');
@@ -92,6 +93,33 @@ function App() {
 
     setActiveFilter('category');
   };
+
+  const handleContactClick = (contactName) => {
+    // Ensure the contact isn't already selected
+    const isContactSelected = filter.selectedContacts && filter.selectedContacts.includes(contactName);
+
+    if (isContactSelected) {
+      setFilter({
+        ...filter,
+        selectedContacts: filter.selectedContacts.filter(name => name !== contactName)
+      });
+    } else {
+      setFilter({
+        ...filter,
+        selectedContacts: [...(filter.selectedContacts || []), contactName]
+      });
+    }
+
+    setActiveFilter('contact');
+  };
+
+  const removeSelectedContact = (contactName) => {
+    setFilter({
+      ...filter,
+      selectedContacts: filter.selectedContacts ? filter.selectedContacts.filter(name => name !== contactName) : []
+    });
+  };
+
   // Charger les données du localStorage au chargement
   useEffect(() => {
     const savedData = todoStorage.loadData();
@@ -124,7 +152,8 @@ function App() {
       endDate: null,
       createDateDirection: '>',
       dueDateDirection: '<',
-      selectedCategories: []
+      selectedCategories: [],
+      selectedContacts: []
     });
     setSearchQuery('');
     setActiveFilter(DEFAULT_SORT);
@@ -205,6 +234,14 @@ function App() {
             }
           }
 
+          if (filter.selectedContacts && filter.selectedContacts.length > 0) {
+            if (!tache.contacts || !tache.contacts.some(contact =>
+                filter.selectedContacts.includes(contact.name)
+            )) {
+              return false;
+            }
+          }
+
           const parseDate = (dateStr) => {
             if (!dateStr) return null;
             const parts = dateStr.includes('/')
@@ -267,6 +304,10 @@ function App() {
               const catA = getTaskCategories(a.id)[0]?.title || '';
               const catB = getTaskCategories(b.id)[0]?.title || '';
               return catA.localeCompare(catB);
+            case 'contact':
+              const contactA = a.contacts && a.contacts.length > 0 ? a.contacts[0].name : '';
+              const contactB = b.contacts && b.contacts.length > 0 ? b.contacts[0].name : '';
+              return contactA.localeCompare(contactB);
             default:
               return 0;
           }
@@ -275,6 +316,16 @@ function App() {
         .filter(tache => {
           return showAllTasks || !isTaskExpiredMoreThanWeek(tache);
         });
+  };
+
+  const hasActiveFilters = () => {
+    return searchQuery ||
+      filter.status !== 'all' ||
+      filter.selectedCategories.length > 0 ||
+      filter.selectedContacts.length > 0 ||
+      filter.createDateTarget ||
+      filter.dueDateTarget ||
+      activeFilter !== DEFAULT_SORT;
   };
 
   // Fonction pour ajouter une tâche
@@ -391,6 +442,7 @@ function App() {
                 activeFilter={activeFilter}
                 categories={data.categories}
                 onClearFilters={clearFilters}
+                removeContact={removeSelectedContact}
             />
             {formMode === 'task' ? (
                 <>
@@ -415,6 +467,7 @@ function App() {
                       allCategories={data.categories}
                       getCategories={getTaskCategories}
                       onCategoryClick={handleCategoryClick}
+                      onContactClick={handleContactClick}
                   />
                 </>
             ) : (
@@ -542,3 +595,4 @@ function App() {
 }
 
 export default App;
+

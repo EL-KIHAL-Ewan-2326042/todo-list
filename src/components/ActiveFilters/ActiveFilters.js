@@ -1,59 +1,90 @@
 import React from 'react';
 import './ActiveFilters.css';
 
-function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearFilters }) {
+function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearFilters, removeContact }) {
+    // Check if any filter is active
     const hasActiveFilters = () => {
         return searchQuery ||
-            filter.createDateTarget ||
-            filter.dueDateTarget ||
             filter.status !== 'all' ||
             activeFilter !== 'dueDate' ||
-            (filter.selectedCategories && filter.selectedCategories.length > 0);
+            (filter.selectedCategories && filter.selectedCategories.length > 0) ||
+            (filter.selectedContacts && filter.selectedContacts.length > 0) ||
+            filter.createDateTarget ||
+            filter.dueDateTarget;
     };
 
-
+    // Skip rendering if no filters are active
     if (!hasActiveFilters()) {
         return null;
     }
 
+    // Get category names from IDs
+    const getCategoryNames = () => {
+        if (!filter.selectedCategories || !filter.selectedCategories.length || !categories) return [];
+        return filter.selectedCategories.map(id => {
+            const category = categories.find(c => c.id === id);
+            return category ? category.title : '';
+        }).filter(Boolean);
+    };
+
+    // Format filter information text
     const getFilterText = () => {
-        const filterTexts = [];
+        const parts = [];
 
-        if (searchQuery) {
-            filterTexts.push(`Recherche : "${searchQuery}"`);
-        }
-
+        // Status filter
         if (filter.status !== 'all') {
-            filterTexts.push(`Statut : ${filter.status === 'active' ? 'En cours' : 'Terminées'}`);
+            parts.push(`Statut: ${filter.status === 'active' ? 'En cours' : 'Terminées'}`);
         }
 
-        if (activeFilter === 'name') {
-            filterTexts.push('Tri par nom');
-        } else if (activeFilter === 'date') {
-            filterTexts.push('Tri par date de création');
-        } else if (activeFilter === 'dueDate' && filter.dueDateTarget) {
-            const direction = filter.dueDateDirection === '<' ? "Jusqu'au" : "À partir du";
-            filterTexts.push(`Échéance : ${direction} ${filter.dueDateTarget}`);
+        // Search query
+        if (searchQuery) {
+            parts.push(`Recherche: "${searchQuery}"`);
         }
 
-        if (filter.selectedCategories && filter.selectedCategories.length > 0) {
-            const categoryNames = filter.selectedCategories.map(catId =>
-                categories.find(c => c.id === catId)?.title || ''
-            ).filter(Boolean);
-
-            if (categoryNames.length > 0) {
-                filterTexts.push(`Catégorie : ${categoryNames.join(', ')}`);
-            }
+        // Sort method
+        const sortMethods = {
+            'name': 'Nom',
+            'date': 'Date de création',
+            'dueDate': 'Date d\'échéance',
+            'category': 'Catégorie',
+            'contact': 'Contact'
+        };
+        if (activeFilter && activeFilter !== 'dueDate') {
+            parts.push(`Trié par: ${sortMethods[activeFilter] || activeFilter}`);
         }
 
-        return filterTexts.join(' | ');
+        // Date filters
+        if (filter.createDateTarget) {
+            const direction = filter.createDateDirection === '>' ? 'après' : 'avant';
+            parts.push(`Créé ${direction} le: ${filter.createDateTarget}`);
+        }
+
+        if (filter.dueDateTarget) {
+            const direction = filter.dueDateDirection === '>' ? 'après' : 'avant';
+            parts.push(`Échéance ${direction} le: ${filter.dueDateTarget}`);
+        }
+
+        // Categories
+        const categoryNames = getCategoryNames();
+        if (categoryNames.length > 0) {
+            parts.push(`Catégories: ${categoryNames.join(', ')}`);
+        }
+
+        // Contacts
+        if (filter.selectedContacts && filter.selectedContacts.length > 0) {
+            parts.push(`Contacts: ${filter.selectedContacts.join(', ')}`);
+        }
+        
+        return parts.join(' • ');
     };
 
     return (
         <div className="active-filters">
-            <span className="filter-text">{getFilterText()}</span>
+            <div className="filter-text">
+                {getFilterText()}
+            </div>
             <button className="clear-filters-btn" onClick={onClearFilters}>
-                Effacer les filtres
+                Effacer
             </button>
         </div>
     );

@@ -23,6 +23,15 @@ function TodoFilter({ filter, setFilter, searchQuery, setSearchQuery, activeFilt
         });
     };
 
+    const removeContact = (contactName) => {
+        if (filter.selectedContacts) {
+            setFilter({
+                ...filter,
+                selectedContacts: filter.selectedContacts.filter(name => name !== contactName)
+            });
+        }
+    };
+
     const toggleCreateDateTarget = () => {
         setCreateDateTarget(!createDateTarget);
         if (!createDateTarget) {
@@ -88,7 +97,9 @@ function TodoFilter({ filter, setFilter, searchQuery, setSearchQuery, activeFilt
     const clearFilters = () => {
         setFilter({
             status: 'all',
-            sort: DEFAULT_SORT
+            sort: DEFAULT_SORT,
+            selectedCategories: [],
+            selectedContacts: []
         });
         setSearchQuery('');
         setActiveFilter(DEFAULT_SORT);
@@ -103,6 +114,7 @@ function TodoFilter({ filter, setFilter, searchQuery, setSearchQuery, activeFilt
             filter.createDateTarget ||
             filter.dueDateTarget ||
             filter.status !== 'all' ||
+            (filter.selectedContacts && filter.selectedContacts.length > 0) ||
             activeFilter !== DEFAULT_SORT;
     };
 
@@ -142,7 +154,7 @@ function TodoFilter({ filter, setFilter, searchQuery, setSearchQuery, activeFilt
                                     e.stopPropagation();
                                     toggleCreateDateDirection();
                                 }}
-s                                title="Changer la direction"
+                                title="Changer la direction"
                             >
                                 {createDateDirection}
                             </span>
@@ -221,12 +233,30 @@ s                                title="Changer la direction"
                 )}
 
                 <button
-                    className={`filter-option ${activeFilter === 'category' ? 'active' : ''}`}
-                    onClick={() => handleFilterSelect('category')}
+                    className={`filter-option ${activeFilter === 'contact' ? 'active' : ''}`}
+                    onClick={() => handleFilterSelect('contact')}
                 >
-                    <i className="fa-solid fa-tags option-icon"></i>
-                    Catégorie
+                    <i className="fa-solid fa-user option-icon"></i>
+                    Contacts
                 </button>
+
+                {filter.selectedContacts && filter.selectedContacts.length > 0 && (
+                    <div className="selected-contacts-container">
+                        <div className="selected-contacts-list">
+                            {filter.selectedContacts.map(contact => (
+                                <div key={contact} className="selected-contact-item">
+                                    <span>{contact}</span>
+                                    <button 
+                                        onClick={() => removeContact(contact)}
+                                        className="remove-contact-btn"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 <button
                     className={`filter-option clear-filters ${!hasActiveFilters() ? 'disabled' : ''}`}

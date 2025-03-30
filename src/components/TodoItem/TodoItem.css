@@ -77,3 +77,14 @@ li .todo-details.show {
     margin-bottom: 10px;
     white-space: pre-wrap;
 }
+
+.clickable-contact {
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.clickable-contact:hover {
+    background-color: #f0f0f0;
+}
