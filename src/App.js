@@ -510,7 +510,7 @@ function App() {
                             filter={filter}
                             searchQuery={searchQuery}
                             activeFilter={activeFilter}
-                            clearFilters={clearFilters}
+                            onClearFilters={clearFilters}
                             categories={data.categories}
                             onRemoveCategory={handleRemoveCategory}
                             onRemoveContact={removeSelectedContact}
