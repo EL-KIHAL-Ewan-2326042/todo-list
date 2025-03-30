@@ -14,7 +14,12 @@ function CategoryForm({ addCategory, categories }) {
         { value: 'pink', label: 'Rose' },
         { value: 'bluesky', label: 'Bleu ciel' },
         { value: 'green', label: 'Vert' },
-        { value: 'purple', label: 'Violet' }
+        { value: 'purple', label: 'Violet' },
+        { value: 'red', label: 'Rouge' },
+        { value: 'yellow', label: 'Jaune' },
+        { value: 'blue', label: 'Bleu' },
+        { value: 'gray', label: 'Gris' },
+        { value: 'black', label: 'Noir' }
     ];
 
     const handleChange = (e) => {
@@ -87,13 +92,13 @@ function CategoryForm({ addCategory, categories }) {
                                     onChange={handleChange}
                                 />
                                 <span
-                                    className="color-preview"
+                                    className="color-preview tooltip-container"
                                     style={{
                                         backgroundColor: getCategoryBackgroundColor(option.value)
                                     }}
-
-                                ></span>
-                                <span className="color-name">{option.label}</span>
+                                >
+                    <span className="tooltip-text">{option.label}</span>
+                </span>
                             </label>
                         ))}
                     </div>
@@ -116,7 +121,7 @@ function CategoryForm({ addCategory, categories }) {
                                       title={category.description || "Aucune description"}
                                   >
                                     {category.title}
-                                    {category.description && <span className="tooltip-text">{category.description}</span>}
+                                      {category.description && <span className="tooltip-text">{category.description}</span>}
                                   </span>
                             </li>
                         ))}

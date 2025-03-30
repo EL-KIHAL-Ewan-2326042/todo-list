@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ConfirmModal from './ConfirmModal';
-import { isTaskExpiredMoreThanWeek } from '../utils/dateUtils';
+import { isTaskExpiredMoreThanWeek, isTaskApproachingDeadline, isTaskRecentlyExpired } from '../utils/dateUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassEmpty } from '@fortawesome/free-solid-svg-icons';
 import { getCategoryStyle } from '../utils/colorUtils';
@@ -46,6 +46,28 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
         return dueDate >= today && dueDate <= oneWeekFromNow;
     };
 
+    const getDeadlineStyle = () => {
+        if (isTaskApproachingDeadline(todo)) {
+            return {
+                border: '1px solid #f44336',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                display: 'inline-flex',
+                alignItems: 'center'
+            };
+        }
+        if (isTaskRecentlyExpired(todo)) {
+            return {
+                backgroundColor: '#fff9c4',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                display: 'inline-flex',
+                alignItems: 'center'
+            };
+        }
+        return {};
+    };
+
 
     return (
         <li className={`todo-item ${todo.done ? 'completed' : ''}`}>
@@ -72,7 +94,7 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
                 )}
 
                 <div className="todo-date-info">
-                        {todo.date_echeance && (
+                    {todo.date_echeance && (
                         <>
                             {isTaskExpiredMoreThanWeek(todo) && (
                                 <FontAwesomeIcon
@@ -81,7 +103,19 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
                                     style={{ marginLeft: '5px', color: '#f44336' }}
                                 />)}
                             <span className="todo-date-label"> Échéance:</span>
-                            <span className="todo-date">{todo.date_echeance}</span>
+                            <span className="todo-date tooltip-container" style={getDeadlineStyle()}>
+                                {isTaskApproachingDeadline(todo) && (
+                                    <span style={{ marginRight: '5px', color: '#f44336' }}>🚨</span>
+                                )}
+                                {isTaskRecentlyExpired(todo) && (
+                                    <span style={{ marginRight: '5px', color: '#f44336' }}>⏰</span>
+                                )}
+
+                                {todo.date_echeance}
+                                {todo.date_creation && (
+                                    <span className="tooltip-text">Créé le: {todo.date_creation}</span>
+                                )}
+                            </span>
                         </>
                     )}
                 </div>

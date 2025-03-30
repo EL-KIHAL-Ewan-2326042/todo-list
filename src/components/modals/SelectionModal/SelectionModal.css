@@ -94,18 +94,6 @@
     }
 }
 
-/* Position variants */
-.selection-modal-overlay.bottom-left {
-    align-items: flex-end;
-    justify-content: flex-start;
-}
-
-.selection-modal-overlay.bottom-left .selection-modal {
-    position: absolute;
-    left: calc(80px + 1.5rem);
-    bottom: 30px;
-}
-
 .selection-modal-overlay.bottom-right {
     align-items: flex-end;
     justify-content: flex-end;
@@ -117,24 +105,3 @@
     bottom: 30px;
 }
 
-.selection-modal-overlay.top-left {
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.selection-modal-overlay.top-left .selection-modal {
-    position: absolute;
-    left: calc(80px + 1.5rem);
-    top: 30px;
-}
-
-.selection-modal-overlay.top-right {
-    align-items: flex-start;
-    justify-content: flex-end;
-}
-
-.selection-modal-overlay.top-right .selection-modal {
-    position: absolute;
-    right: calc(80px + 1.5rem);
-    top: 30px;
-}
