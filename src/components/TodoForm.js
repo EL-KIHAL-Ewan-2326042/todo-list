@@ -15,6 +15,7 @@ function TodoForm({ addTodo, categories, initialValues = null, submitLabel = "Aj
         selectedCategories: initialValues?.selectedCategories || []
     });
 
+    const [newContact, setNewContact] = useState('');
     const [showDetails, setShowDetails] = useState(!!initialValues);
 
     function formatDateToDisplay(dateString) {
@@ -61,6 +62,28 @@ function TodoForm({ addTodo, categories, initialValues = null, submitLabel = "Aj
             selectedCategories: isSelected
                 ? formData.selectedCategories.filter(id => id !== categoryId)
                 : [...formData.selectedCategories, categoryId]
+        });
+    };
+
+    const handleAddContact = (e) => {
+        e.preventDefault();
+        if (!newContact.trim()) return;
+
+        setFormData({
+            ...formData,
+            contacts: [...formData.contacts, { name: newContact.trim() }]
+        });
+
+        setNewContact('');
+    };
+
+    const handleRemoveContact = (index) => {
+        const updatedContacts = [...formData.contacts];
+        updatedContacts.splice(index, 1);
+
+        setFormData({
+            ...formData,
+            contacts: updatedContacts
         });
     };
 
@@ -139,8 +162,8 @@ function TodoForm({ addTodo, categories, initialValues = null, submitLabel = "Aj
                         <CategoryList
                             categories={categories}
                             isCheckable={true}
-                            selectedCategories={formData.selectedCategories}
-                            onCategoryToggle={handleCategoryToggle}
+                            selectedCategoryIds={formData.selectedCategories}
+                            toggleCategory={handleCategoryToggle}
                             className="form-category-list"
                         />
                     </div>
@@ -157,6 +180,46 @@ function TodoForm({ addTodo, categories, initialValues = null, submitLabel = "Aj
                         rows="3"
                     />
                 </div>
+
+                <div className="form-group">
+                    <label>Contacts:</label>
+                    <div className="contacts-container">
+                        <div className="add-contact-form">
+                            <input
+                                type="text"
+                                value={newContact}
+                                onChange={(e) => setNewContact(e.target.value)}
+                                placeholder="Nom du contact"
+                                className="contact-input"
+                            />
+                            <button
+                                type="button"
+                                onClick={handleAddContact}
+                                className="add-contact-btn"
+                            >
+                                Ajouter
+                            </button>
+                        </div>
+
+                        {formData.contacts.length > 0 && (
+                            <ul className="contacts-list">
+                                {formData.contacts.map((contact, index) => (
+                                    <li key={index} className="contact-item">
+                                        <span>{contact.name}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveContact(index)}
+                                            className="remove-contact-btn"
+                                        >
+                                            ×
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                </div>
+
             </div>
         </form>
     );

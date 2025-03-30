@@ -14,9 +14,9 @@ function CategoryList({ categories, selectedCategoryIds, toggleCategory, isCheck
                     {isCheckable ? (
                         <CategoryItem
                             category={category}
-                            isSelected={selectedCategoryIds?.includes(category.id)}
-                            onToggle={() => toggleCategory(category.id)}
                             isCheckable={true}
+                            isChecked={selectedCategoryIds?.includes(category.id)}
+                            onChange={() => toggleCategory(category.id)}
                         />
                     ) : (
                         <div

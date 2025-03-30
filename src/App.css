@@ -1161,3 +1161,59 @@
 .form-group.echeance {
   width: 50%;
 }
+
+/* Formulaire d'ajout de tâche */
+.contacts-container {
+  margin-top: 8px;
+}
+
+.add-contact-form {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.contact-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.add-contact-btn {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.contacts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.remove-contact-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 4px;
+}
+
+.remove-contact-btn:hover {
+  color: #d32f2f;
+}
