@@ -7,6 +7,11 @@ import './EditTaskModal.css';
 function EditTaskModal({ isOpen, todo, categories, onUpdate, onDelete, onClose }) {
     if (!isOpen) return null;
 
+    const handleSubmit = (updatedTodo) => {
+        onUpdate(updatedTodo);
+        onClose();
+    };
+
     return (
         <Modal isOpen={isOpen}>
             <div className="modal-container edit-task-modal">
@@ -16,15 +21,21 @@ function EditTaskModal({ isOpen, todo, categories, onUpdate, onDelete, onClose }
                 </div>
                 <div className="modal-body">
                     <TodoForm
-                        addTodo={onUpdate}
+                        addTodo={handleSubmit}
                         categories={categories}
                         initialValues={todo}
-                        submitLabel="Modifier"
+                        submitLabel="Enregistrer"
+                        hideSubmitButton={true}
                     />
                 </div>
                 <div className="modal-footer">
                     <button className="modal-btn cancel-btn" onClick={onClose}>Annuler</button>
-                    <button className="modal-btn confirm-btn" onClick={() => onDelete(todo.id)}>Supprimer</button>
+                    <button
+                        className="modal-btn confirm-btn edit-btn"
+                        onClick={() => document.querySelector('.edit-task-modal form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))}
+                    >
+                        Modifier
+                    </button>
                 </div>
             </div>
         </Modal>

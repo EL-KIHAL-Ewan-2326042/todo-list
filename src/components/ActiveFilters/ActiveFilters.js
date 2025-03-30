@@ -74,7 +74,7 @@ function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearF
         if (filter.selectedContacts && filter.selectedContacts.length > 0) {
             parts.push(`Contacts: ${filter.selectedContacts.join(', ')}`);
         }
-        
+
         return parts.join(' • ');
     };
 

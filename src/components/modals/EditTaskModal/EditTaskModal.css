@@ -25,3 +25,16 @@
 .edit-task-modal .todo-form-main .todo-details-toggle {
     display: none;
 }
+
+.edit-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #388e3c;
+}
+
+.edit-task-modal .todo-form .form-submit-button {
+    display: none;
+}

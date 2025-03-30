@@ -853,7 +853,31 @@
 .urgent-checkbox-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
+  flex: 1;
+  margin-top: 22px;
+}
+
+.urgent-checkbox-container .toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.urgent-checkbox-container label {
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.urgent-checkbox-container input[type="checkbox"] {
+  margin: 0;
+}
+
+.date-urgent-container .custom-datepicker {
+  margin-bottom: 0;
+  flex: 2;
 }
 
 .date-urgent-container .custom-datepicker {

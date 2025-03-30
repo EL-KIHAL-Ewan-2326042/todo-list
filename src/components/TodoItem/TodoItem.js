@@ -84,8 +84,11 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
     };
 
     const shouldShowDetailsButton = () => {
-        return todo.date_echeance || todo.description || (categories && categories.length > 2);
-    };
+        return todo.date_echeance || 
+        todo.description || 
+        (categories && categories.length > 2) ||
+        (todo.contacts && todo.contacts.length > 0); 
+ };
 
     const visibleCategories = categories && categories.length > 0 ? categories.slice(0, 2) : [];
     const hasMoreCategories = categories && categories.length > 2;
