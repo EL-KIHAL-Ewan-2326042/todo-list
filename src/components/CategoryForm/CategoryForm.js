@@ -32,7 +32,7 @@ function CategoryForm({ addCategory, categories }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!formData.title.trim()) return;
+        if (!formData.title.trim() || formData.title.trim().length < 3) return;
 
         addCategory({
             title: formData.title,
@@ -63,6 +63,7 @@ function CategoryForm({ addCategory, categories }) {
                         placeholder="Ex: Travail, Personnel..."
                         className="category-input"
                         required
+                        minLength={3}
                     />
                 </div>
 
