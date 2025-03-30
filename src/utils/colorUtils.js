@@ -3,8 +3,13 @@ export const getCategoryBackgroundColor = (color) => {
         case 'orange': return '#fff3e0';
         case 'pink': return '#fce4ec';
         case 'bluesky': return '#e3f2fd';
-        case 'green': return '#e8f5e9';
-        case 'purple': return '#f3e5f5';
+        case 'green': return '#388e49';
+        case 'purple': return '#7f158e';
+        case 'red': return '#FF6B6B';
+        case 'yellow': return '#FFD700';
+        case 'blue': return '#03224c';
+        case 'gray': return '#A9A9A9';
+        case 'black': return '#000000';
         default: return '#f5f5f5';
     }
 };

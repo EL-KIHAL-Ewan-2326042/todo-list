@@ -3,22 +3,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle as fasSolidCircle } from '@fortawesome/free-solid-svg-icons';
 import { faCircle as farRegularCircle } from '@fortawesome/free-regular-svg-icons';
 import { faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons';
-import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
-import TodoFilter from './components/TodoFilter';
-import CategoryForm from './components/CategoryForm';
+import CategoryForm from './components/CategoryForm/CategoryForm';
 import todoStorage from './services/todoStorage';
 import { initialData } from './services/initialData';
 import './App.css';
-import ExportModal from './components/ExportModal';
-import ConfirmModal from "./components/ConfirmModal";
-import WelcomeModal from './components/WelcomeModal';
+
+// Importation des composants modulaires
+import ExportModal from './components/modals/ExportModal';
+import ConfirmModal from './components/modals/ConfirmModal/ConfirmModal';
+import WelcomeModal from './components/modals/WelcomeModal/WelcomeModal';
+import SelectionModal from './components/modals/SelectionModal/SelectionModal';
+import TaskModal from './components/modals/TaskModal/TaskModal';
+import FilterModal from './components/modals/FilterModal/FilterModal';
+import HelpMenu from './components/modals/HelpMenu/HelpMenu';
 import { isTaskExpiredMoreThanWeek } from './utils/dateUtils';
 
 export const DEFAULT_SORT = 'dueDate';
 
 function App() {
-
   const emptyData = {
     taches: [],
     categories: [],
@@ -88,8 +91,7 @@ function App() {
     }
   }, []);
 
-
-    const handleClearTasks = () => {
+  const handleClearTasks = () => {
     setShowClearTasksModal(true);
   };
 
@@ -223,7 +225,6 @@ function App() {
         });
   };
 
-
   // Fonction pour ajouter une tâche
   const addTodo = (newTodo) => {
     const maxId = Math.max(...data.taches.map(t => t.id), 0);
@@ -249,9 +250,6 @@ function App() {
         }));
       });
     }
-
-    // Fermer la modale après ajout
-    setShowTaskModal(false);
   };
 
   if (!data) return <div>Chargement...</div>;
@@ -314,25 +312,6 @@ function App() {
               <i className="fa-solid fa-filter"></i>
             </button>
 
-            {showFilterModal && (
-                <div className="modal-overlay top-right" onClick={() => setShowFilterModal(false)}>
-                  <div className="selection-modal" onClick={(e) => e.stopPropagation()}>
-                    <div className="modal-header">
-                      <h3>Filtrer les tâches</h3>
-                      <button className="modal-close" onClick={() => setShowFilterModal(false)}>×</button>
-                    </div>
-                    <TodoFilter
-                        filter={filter}
-                        setFilter={setFilter}
-                        searchQuery={searchQuery}
-                        setSearchQuery={setSearchQuery}
-                        activeFilter={activeFilter}
-                        setActiveFilter={setActiveFilter}
-                    />
-                  </div>
-                </div>
-            )}
-
             <div className="menu-container">
               <button
                   className="help-menu-btn"
@@ -342,40 +321,6 @@ function App() {
                 ?
               </button>
             </div>
-            {menuOpen && (
-                <div className="modal-overlay bottom-left" onClick={() => setMenuOpen(false)}>
-                  <div className="selection-modal" onClick={(e) => e.stopPropagation()}>
-                    <div className="selection-options">
-                      <button onClick={handleExport} className="option-button export-btn">
-                        <i className="fa-solid fa-arrow-up option-icon"></i>
-                        Exporter (JSON)
-                      </button>
-                      <label className="option-button import-btn">
-                        <i className="fa-solid fa-arrow-down option-icon"></i>
-                        Importer (JSON)
-                        <input
-                            type="file"
-                            accept=".json"
-                            onChange={handleImport}
-                            style={{ display: 'none' }}
-                        />
-                      </label>
-                      <button onClick={handleClearTasks} className="option-button clear-btn">
-                        <i className="fa-solid fa-trash option-icon"></i>
-                        Vider les tâches
-                      </button>
-                      <button onClick={handleResetTasks} className="option-button reset-btn">
-                        <i className="fa-solid fa-refresh option-icon"></i>
-                        Réinitialiser tâches
-                      </button>
-                      <button  onClick={toggleShowAllTasks} className="option-button show-all-btn">
-                        <i className={`fa-solid ${showAllTasks ? 'fa-eye-slash' : 'fa-eye'} option-icon`}></i>
-                        {showAllTasks ? "Masquer les tâches anciennes" : "Afficher toutes les tâches"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-            )}
           </div>
 
           <div className="todo-container">
@@ -416,34 +361,49 @@ function App() {
           +
         </button>
 
-        {showSelectionModal && (
-            <div className="modal-overlay" onClick={() => setShowSelectionModal(false)}>
-              <div className="selection-modal" onClick={(e) => e.stopPropagation()}>
-                <div className="selection-options">
-                  <button
-                      className="option-button task-option"
-                      onClick={() => {
-                        setShowSelectionModal(false);
-                        setShowTaskModal(true);
-                      }}
-                  >
-                    <span className="option-icon">✏️</span>
-                    Ajouter une tâche
-                  </button>
-                  <button
-                      className="option-button category-option"
-                      onClick={() => {
-                        setShowSelectionModal(false);
-                        setShowCategoryModal(true);
-                      }}
-                  >
-                    <span className="option-icon">🏷️</span>
-                    Gérer les catégories
-                  </button>
-                </div>
-              </div>
-            </div>
-        )}
+        {/* Utilisation des composants modulaires */}
+        <SelectionModal
+            isOpen={showSelectionModal}
+            onClose={() => setShowSelectionModal(false)}
+            onTaskSelect={() => {
+              setShowSelectionModal(false);
+              setShowTaskModal(true);
+            }}
+            onCategorySelect={() => {
+              setShowSelectionModal(false);
+              setShowCategoryModal(true);
+            }}
+        />
+
+        <TaskModal
+            isOpen={showTaskModal}
+            onClose={() => setShowTaskModal(false)}
+            onAddTodo={addTodo}
+            categories={data.categories}
+        />
+
+        <FilterModal
+            isOpen={showFilterModal}
+            onClose={() => setShowFilterModal(false)}
+            filter={filter}
+            setFilter={setFilter}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            activeFilter={activeFilter}
+            setActiveFilter={setActiveFilter}
+            position="top-right"
+        />
+
+        <HelpMenu
+            isOpen={menuOpen}
+            onClose={() => setMenuOpen(false)}
+            onExport={handleExport}
+            onImport={handleImport}
+            onClearTasks={handleClearTasks}
+            onResetTasks={handleResetTasks}
+            onShowAllTasks={toggleShowAllTasks}
+            showAllTasks={showAllTasks}
+        />
 
         {showCategoryModal && (
             <div className="modal-overlay bottom-right">
@@ -460,29 +420,6 @@ function App() {
                 <div className="modal-body">
                   <CategoryForm
                       addCategory={handleAddCategory}
-                      categories={data.categories}
-                  />
-                </div>
-              </div>
-            </div>
-        )}
-
-        {/* Modale pour le formulaire de tâche */}
-        {showTaskModal && (
-            <div className="modal-overlay bottom-right">
-              <div className="task-modal-container">
-                <div className="modal-header">
-                  <h3>Ajouter une nouvelle tâche</h3>
-                  <button
-                      className="modal-close"
-                      onClick={() => setShowTaskModal(false)}
-                  >
-                    ×
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <TodoForm
-                      addTodo={addTodo}
                       categories={data.categories}
                   />
                 </div>
@@ -529,7 +466,6 @@ function App() {
                 onStartFresh={handleStartFresh}
             />
         )}
-
       </div>
   );
 }

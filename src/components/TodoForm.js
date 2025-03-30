@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import DatePicker from './DatePicker';
-import { getCategoryStyle } from '../utils/colorUtils';
+import DatePicker from './DatePicker/DatePicker';
+import CategoryItem from './CategoryItem/CategoryItem';
+import CategoryList from './CategoryList/CategoryList';
 
 function TodoForm({ addTodo, categories }) {
     const [formData, setFormData] = useState({
@@ -15,7 +16,6 @@ function TodoForm({ addTodo, categories }) {
     });
 
     const [showDetails, setShowDetails] = useState(false);
-
 
     function formatDateToDisplay(dateString) {
         if (!dateString) return '';
@@ -109,7 +109,7 @@ function TodoForm({ addTodo, categories }) {
             <div className={`todo-form-details ${showDetails ? 'show' : ''}`}>
 
                 <div className="date-urgent-container">
-                    <div className="form-group">
+                    <div className="form-group echeance">
                         <label>Date d'échéance:</label>
                         <DatePicker
                             selectedDate={formData.date_echeance ? formData.date_echeance.split('/').reverse().join('-') : ''}
@@ -136,18 +136,13 @@ function TodoForm({ addTodo, categories }) {
                 {categories && categories.length > 0 && (
                     <div className="form-group">
                         <label>Catégories:</label>
-                        <div className="category-selector">
-                            {categories.map(category => (
-                                <div
-                                    key={category.id}
-                                    className={`category-chip ${formData.selectedCategories.includes(category.id) ? 'selected' : ''}`}
-                                    style={getCategoryStyle(category.color)}
-                                    onClick={() => handleCategoryToggle(category.id)}
-                                >
-                                    {category.title}
-                                </div>
-                            ))}
-                        </div>
+                        <CategoryList
+                            categories={categories}
+                            isCheckable={true}
+                            selectedCategories={formData.selectedCategories}
+                            onCategoryToggle={handleCategoryToggle}
+                            className="form-category-list"
+                        />
                     </div>
                 )}
 

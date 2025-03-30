@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DatePicker from './DatePicker';
+import DatePicker from './DatePicker/DatePicker';
 import {DEFAULT_SORT} from '../App.js';
 
 function TodoFilter({ filter, setFilter, searchQuery, setSearchQuery, activeFilter, setActiveFilter }) {

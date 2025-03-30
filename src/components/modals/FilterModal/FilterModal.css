@@ -1,0 +1,92 @@
+.filter-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-modal {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    width: 90%;
+    max-width: 20vw;
+    animation: popup-appear 0.3s forwards;
+}
+
+.filter-modal .modal-header {
+    background-color: #2196f3;
+    padding: 1rem 1.5rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-modal .modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.filter-modal .modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.filter-modal .modal-close:hover {
+    opacity: 1;
+}
+
+.filter-modal-content {
+    padding: 0.05rem;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+@keyframes popup-appear {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.filter-modal-overlay.top-right {
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.filter-modal-overlay.top-right .filter-modal {
+    position: absolute;
+    right: calc(80px + 1.5rem);
+    top: 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .filter-modal {
+        width: 95%;
+        max-width: none;
+        margin: 10px;
+    }
+
+    .filter-modal-content {
+        padding: 1rem;
+    }
+}

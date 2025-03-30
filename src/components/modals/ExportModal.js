@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './ConfirmModal.css';
-import { FILE_NAME } from '../services/todoStorage';
+import './ConfirmModal/ConfirmModal.css';
+import { FILE_NAME } from '../../services/todoStorage';
 
 function ExportModal({ isOpen, onConfirm, onCancel }) {
     const [filename, setFilename] = useState(FILE_NAME);
