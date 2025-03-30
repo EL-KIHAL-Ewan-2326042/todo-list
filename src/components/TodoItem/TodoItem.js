@@ -3,16 +3,23 @@ import ConfirmModal from '../modals/ConfirmModal/ConfirmModal';
 import { isTaskExpiredMoreThanWeek, isTaskApproachingDeadline, isTaskRecentlyExpired } from '../../utils/dateUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassEmpty } from '@fortawesome/free-solid-svg-icons';
-import { getCategoryStyle } from '../../utils/colorUtils';
 import './TodoItem.css';
-import CategoryItem from '../CategoryItem/CategoryItem';
 import CategoryList from '../CategoryList/CategoryList';
 import EditTaskModal from '../modals/EditTaskModal/EditTaskModal';
 
-function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories }) {
+function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCategoryClick }) {
     const [showDetails, setShowDetails] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+
+    const handleCategoryClick = (category, e) => {
+        if (e) {
+            e.stopPropagation();
+        }
+        if (onCategoryClick) {
+            onCategoryClick(category);
+        }
+    };
 
     const handleToggle = () => {
         toggleTodo(todo.id);
@@ -43,21 +50,6 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories }) {
 
     const toggleDetails = () => {
         setShowDetails(!showDetails);
-    };
-
-    const isDateNearDeadline = () => {
-        if (!todo.date_echeance) return false;
-
-        const [day, month, year] = todo.date_echeance.split('/').map(Number);
-        const dueDate = new Date(year, month - 1, day);
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const oneWeekFromNow = new Date(today);
-        oneWeekFromNow.setDate(today.getDate() + 7);
-
-        return dueDate >= today && dueDate <= oneWeekFromNow;
     };
 
     const getDeadlineStyle = () => {
@@ -149,6 +141,7 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories }) {
                                 categories={visibleCategories}
                                 isCheckable={false}
                                 className="inline-category-list"
+                                onCategoryClick={handleCategoryClick}
                             />
                         )}
                         {hasMoreCategories && (
@@ -220,6 +213,7 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories }) {
                             <CategoryList
                                 categories={categories}
                                 isCheckable={false}
+                                onCategoryClick={handleCategoryClick}
                             />
                         </div>
                     )}

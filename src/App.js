@@ -19,6 +19,9 @@ import FilterModal from './components/modals/FilterModal/FilterModal';
 import HelpMenu from './components/modals/HelpMenu/HelpMenu';
 import { isTaskExpiredMoreThanWeek } from './utils/dateUtils';
 
+import ActiveFilters from './components/ActiveFilters/ActiveFilters';
+
+
 export const DEFAULT_SORT = 'dueDate';
 
 function App() {
@@ -39,7 +42,8 @@ function App() {
     startDate: null,
     endDate: null,
     createDateDirection: '>',
-    dueDateDirection: '<'
+    dueDateDirection: '<',
+    selectedCategory: null
   });
 
   const [formMode, setFormMode] = useState('task');
@@ -71,6 +75,14 @@ function App() {
     }
   };
 
+  const handleCategoryClick = (category) => {
+    setFilter({
+      ...filter,
+      selectedCategory: category.id
+    });
+    setActiveFilter('category');
+  };
+
   // Charger les données du localStorage au chargement
   useEffect(() => {
     const savedData = todoStorage.loadData();
@@ -93,6 +105,20 @@ function App() {
 
   const handleClearTasks = () => {
     setShowClearTasksModal(true);
+  };
+
+  const clearFilters = () => {
+    setFilter({
+      status: 'all',
+      sort: DEFAULT_SORT,
+      startDate: null,
+      endDate: null,
+      createDateDirection: '>',
+      dueDateDirection: '<',
+      selectedCategory: null
+    });
+    setSearchQuery('');
+    setActiveFilter(DEFAULT_SORT);
   };
 
   const confirmClearTasks = () => {
@@ -144,6 +170,16 @@ function App() {
     setShowWelcomeModal(false);
   };
 
+  const getTaskCategories = (taskId) => {
+    if (!data) return [];
+
+    const relations = data.relations.filter(r => r.tache === taskId);
+
+    return relations.map(relation =>
+        data.categories.find(c => c.id === relation.categorie)
+    ).filter(Boolean);
+  };
+
   // Filtrer les tâches selon les critères
   const getFilteredTasks = () => {
     if (!data || !data.taches) return [];
@@ -152,6 +188,13 @@ function App() {
         .filter(tache => {
           if (filter.status === 'completed' && !tache.done) return false;
           if (filter.status === 'active' && tache.done) return false;
+
+          if (filter.selectedCategory) {
+            const taskCategories = getTaskCategories(tache.id).map(c => c.id);
+            if (!taskCategories.includes(filter.selectedCategory)) {
+              return false;
+            }
+          }
 
           const parseDate = (dateStr) => {
             if (!dateStr) return null;
@@ -269,16 +312,6 @@ function App() {
     }));
   };
 
-  const getTaskCategories = (taskId) => {
-    if (!data) return [];
-
-    const relations = data.relations.filter(r => r.tache === taskId);
-
-    return relations.map(relation =>
-        data.categories.find(c => c.id === relation.categorie)
-    ).filter(Boolean);
-  };
-
   const toggleShowAllTasks = () => {
     if (!showAllTasks) {
       setShowConfirmAllTasks(true);
@@ -343,6 +376,13 @@ function App() {
           </div>
 
           <div className="todo-container">
+            <ActiveFilters
+                filter={filter}
+                searchQuery={searchQuery}
+                activeFilter={activeFilter}
+                categories={data.categories}
+                onClearFilters={clearFilters}
+            />
             {formMode === 'task' ? (
                 <>
                   <TodoList
@@ -365,6 +405,7 @@ function App() {
                       updateTask={updateTask}
                       allCategories={data.categories}
                       getCategories={getTaskCategories}
+                      onCategoryClick={handleCategoryClick}
                   />
                 </>
             ) : (

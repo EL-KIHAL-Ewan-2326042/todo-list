@@ -20,7 +20,7 @@ function CategoryList({ categories, selectedCategoryIds, toggleCategory, isCheck
                         />
                     ) : (
                         <div
-                            onClick={() => onCategoryClick && onCategoryClick(category)}
+                            onClick={(e) => onCategoryClick && onCategoryClick(category, e)}
                             className="clickable-category"
                         >
                             <CategoryItem
