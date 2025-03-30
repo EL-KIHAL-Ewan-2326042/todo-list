@@ -43,7 +43,7 @@ function App() {
     endDate: null,
     createDateDirection: '>',
     dueDateDirection: '<',
-    selectedCategory: null
+    selectedCategories: []
   });
 
   const [formMode, setFormMode] = useState('task');
@@ -76,13 +76,22 @@ function App() {
   };
 
   const handleCategoryClick = (category) => {
-    setFilter({
-      ...filter,
-      selectedCategory: category.id
-    });
+    const isCategorySelected = filter.selectedCategories.includes(category.id);
+
+    if (isCategorySelected) {
+      setFilter({
+        ...filter,
+        selectedCategories: filter.selectedCategories.filter(id => id !== category.id)
+      });
+    } else {
+      setFilter({
+        ...filter,
+        selectedCategories: [...filter.selectedCategories, category.id]
+      });
+    }
+
     setActiveFilter('category');
   };
-
   // Charger les données du localStorage au chargement
   useEffect(() => {
     const savedData = todoStorage.loadData();
@@ -115,7 +124,7 @@ function App() {
       endDate: null,
       createDateDirection: '>',
       dueDateDirection: '<',
-      selectedCategory: null
+      selectedCategories: []
     });
     setSearchQuery('');
     setActiveFilter(DEFAULT_SORT);
@@ -189,9 +198,9 @@ function App() {
           if (filter.status === 'completed' && !tache.done) return false;
           if (filter.status === 'active' && tache.done) return false;
 
-          if (filter.selectedCategory) {
+          if (filter.selectedCategories && filter.selectedCategories.length > 0) {
             const taskCategories = getTaskCategories(tache.id).map(c => c.id);
-            if (!taskCategories.includes(filter.selectedCategory)) {
+            if (!filter.selectedCategories.every(catId => taskCategories.includes(catId))) {
               return false;
             }
           }

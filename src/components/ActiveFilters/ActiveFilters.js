@@ -8,8 +8,9 @@ function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearF
             filter.dueDateTarget ||
             filter.status !== 'all' ||
             activeFilter !== 'dueDate' ||
-            filter.selectedCategory;
+            (filter.selectedCategories && filter.selectedCategories.length > 0);
     };
+
 
     if (!hasActiveFilters()) {
         return null;
@@ -35,9 +36,14 @@ function ActiveFilters({ filter, searchQuery, activeFilter, categories, onClearF
             filterTexts.push(`Échéance : ${direction} ${filter.dueDateTarget}`);
         }
 
-        if (filter.selectedCategory) {
-            const categoryName = categories.find(c => c.id === filter.selectedCategory)?.title || '';
-            filterTexts.push(`Catégorie : ${categoryName}`);
+        if (filter.selectedCategories && filter.selectedCategories.length > 0) {
+            const categoryNames = filter.selectedCategories.map(catId =>
+                categories.find(c => c.id === catId)?.title || ''
+            ).filter(Boolean);
+
+            if (categoryNames.length > 0) {
+                filterTexts.push(`Catégorie : ${categoryNames.join(', ')}`);
+            }
         }
 
         return filterTexts.join(' | ');
