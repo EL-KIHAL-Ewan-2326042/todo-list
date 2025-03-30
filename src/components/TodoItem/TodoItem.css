@@ -88,3 +88,13 @@ li .todo-details.show {
 .clickable-contact:hover {
     background-color: #f0f0f0;
 }
+
+.todo-category-icon {
+    color: #607d8b;
+    transition: color 0.2s;
+}
+
+.todo-category-icon:hover {
+    color: #2196f3;
+}
+

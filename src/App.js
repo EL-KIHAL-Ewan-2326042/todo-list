@@ -380,6 +380,27 @@ function App() {
     }
   };
 
+  const updateTaskCategories = (taskId, categoryIds) => {
+    // Supprimer toutes les relations existantes pour cette tâche
+    setData(prev => ({
+      ...prev,
+      relations: prev.relations.filter(r => r.tache !== taskId)
+    }));
+
+    // Ajouter les nouvelles relations
+    if (categoryIds && categoryIds.length > 0) {
+      const newRelations = categoryIds.map(categoryId => ({
+        tache: taskId,
+        categorie: categoryId
+      }));
+
+      setData(prev => ({
+        ...prev,
+        relations: [...prev.relations, ...newRelations]
+      }));
+    }
+  };
+
   const updateTask = (updatedTask) => {
     setData(prev => ({
       ...prev,
@@ -468,6 +489,7 @@ function App() {
                       getCategories={getTaskCategories}
                       onCategoryClick={handleCategoryClick}
                       onContactClick={handleContactClick}
+                      onUpdateCategories={updateTaskCategories}
                   />
                 </>
             ) : (

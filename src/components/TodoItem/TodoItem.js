@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import ConfirmModal from '../modals/ConfirmModal/ConfirmModal';
+import EditTaskModal from '../modals/EditTaskModal/EditTaskModal';
+import CategoryManagerModal from '../modals/CategoryManagerModal/CategoryManagerModal';
 import { isTaskExpiredMoreThanWeek, isTaskApproachingDeadline, isTaskRecentlyExpired } from '../../utils/dateUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHourglassEmpty } from '@fortawesome/free-solid-svg-icons';
+import { faHourglassEmpty, faTags } from '@fortawesome/free-solid-svg-icons';
 import './TodoItem.css';
 import CategoryList from '../CategoryList/CategoryList';
-import EditTaskModal from '../modals/EditTaskModal/EditTaskModal';
 
-function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCategoryClick, onContactClick }) {
+function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, allCategories, onCategoryClick, onContactClick, onUpdateCategories }) {
     const [showDetails, setShowDetails] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showCategoryModal, setShowCategoryModal] = useState(false);
 
     const handleCategoryClick = (category, e) => {
         if (e) {
@@ -19,6 +21,11 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
         if (onCategoryClick) {
             onCategoryClick(category);
         }
+    };
+
+    const handleManageCategories = (e) => {
+        e.stopPropagation();
+        setShowCategoryModal(true);
     };
 
     const handleContactClick = (contactName, e) => {
@@ -84,14 +91,16 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
     };
 
     const shouldShowDetailsButton = () => {
-        return todo.date_echeance || 
-        todo.description || 
+        return todo.date_echeance ||
+        todo.description ||
         (categories && categories.length > 2) ||
-        (todo.contacts && todo.contacts.length > 0); 
+        (todo.contacts && todo.contacts.length > 0);
  };
 
     const visibleCategories = categories && categories.length > 0 ? categories.slice(0, 2) : [];
     const hasMoreCategories = categories && categories.length > 2;
+    const hasDeadline = !!todo.date_echeance;
+    const hasCategories = visibleCategories.length > 0;
 
     return (
         <li className={`todo-item ${todo.done ? 'completed' : ''}`}>
@@ -144,7 +153,9 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
                     )}
                 </div>
 
-                <span className="todo-separator">|</span>
+                {hasDeadline && (
+                    <span className="todo-separator">|</span>
+                )}
 
                 {categories && categories.length > 0 && (
                     <div className="todo-categories">
@@ -166,7 +177,7 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
                     </div>
                 )}
 
-                {(visibleCategories.length > 0) && (
+                {hasCategories && (
                     <span className="todo-separator">|</span>
                 )}
 
@@ -190,6 +201,17 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
                     title="Modifier la tâche"
                 >
                     ✏️
+                </button>
+
+                <span className="todo-separator">|</span>
+
+                <button
+                    className="todo-action-button todo-category-icon"
+                    onClick={handleManageCategories}
+                    aria-label="Gérer les catégories"
+                    title="Gérer les catégories"
+                >
+                    <FontAwesomeIcon icon={faTags} />
                 </button>
 
                 <span className="todo-separator">|</span>
@@ -271,6 +293,16 @@ function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories, onCate
                     setShowDeleteModal(true);
                 }}
                 onClose={() => setShowEditModal(false)}
+            />
+
+            <CategoryManagerModal
+                isOpen={showCategoryModal}
+                onClose={() => setShowCategoryModal(false)}
+                taskId={todo.id}
+                taskTitle={todo.title}
+                allCategories={allCategories}
+                selectedCategories={categories}
+                onUpdateCategories={onUpdateCategories}
             />
 
         </li>

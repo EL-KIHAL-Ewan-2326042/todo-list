@@ -1,0 +1,50 @@
+.category-manager-modal .modal-body {
+    padding: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.category-manager-modal .instruction {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.category-manager-modal .task-title-display {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    margin-top: 5px;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.category-manager-modal .no-categories-message {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 6px;
+    color: #666;
+    text-align: center;
+    font-style: italic;
+}
+
+.category-manager-modal .categories-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.category-manager-modal .category-badge {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .category-manager-modal .categories-list-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
