@@ -1241,3 +1241,14 @@
 .remove-contact-btn:hover {
   color: #d32f2f;
 }
+
+.todo-container.calendar-mode {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  max-height: 70vh;
+}
+
+.todo-container.calendar-mode .calendar-view-container {
+  overflow: hidden;
+}

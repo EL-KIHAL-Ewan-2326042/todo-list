@@ -160,6 +160,7 @@ function App() {
     });
     setSearchQuery('');
     setActiveFilter(DEFAULT_SORT);
+    setFilterIcon(<FontAwesomeIcon icon={fasSolidCircle} />);
   };
 
   const confirmClearTasks = () => {
@@ -476,7 +477,7 @@ function App() {
             </div>
           </div>
 
-          <div className="todo-container">
+          <div className={`todo-container ${showCalendarView ? 'calendar-mode' : ''}`}>
             {formMode === 'task' ? (
                 <>
                   {showCalendarView ? (
