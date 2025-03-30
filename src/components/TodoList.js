@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoItem from './TodoItem';
+import TodoItem from './TodoItem/TodoItem';
 
 function TodoList({ tasks, toggleTask, deleteTask, getCategories }) {
     if (!tasks || tasks.length === 0) {

@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
 import './CategoryForm.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faHome,
+    faBriefcase,
+    faGraduationCap,
+    faHeartPulse,
+    faUtensils,
+    faShoppingCart,
+    faPlane,
+    faDumbbell,
+    faCalendarCheck,
+    faCoins
+} from '@fortawesome/free-solid-svg-icons';
 import { getCategoryStyle, getCategoryBackgroundColor } from '../../utils/colorUtils';
+import CategoryItem from '../CategoryItem/CategoryItem';
+import CategoryList from '../CategoryList/CategoryList';
 
 function CategoryForm({ addCategory, categories }) {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        color: 'orange'
+        color: 'orange',
+        icon: 'home'
     });
 
     const colorOptions = [
@@ -20,6 +36,19 @@ function CategoryForm({ addCategory, categories }) {
         { value: 'blue', label: 'Bleu' },
         { value: 'gray', label: 'Gris' },
         { value: 'black', label: 'Noir' }
+    ];
+
+    const iconOptions = [
+        { value: 'home', label: 'Maison', icon: faHome },
+        { value: 'work', label: 'Travail', icon: faBriefcase },
+        { value: 'education', label: 'Éducation', icon: faGraduationCap },
+        { value: 'health', label: 'Santé', icon: faHeartPulse },
+        { value: 'food', label: 'Alimentation', icon: faUtensils },
+        { value: 'shopping', label: 'Shopping', icon: faShoppingCart },
+        { value: 'travel', label: 'Voyage', icon: faPlane },
+        { value: 'fitness', label: 'Fitness', icon: faDumbbell },
+        { value: 'event', label: 'Événement', icon: faCalendarCheck },
+        { value: 'finance', label: 'Finance', icon: faCoins }
     ];
 
     const handleChange = (e) => {
@@ -38,15 +67,35 @@ function CategoryForm({ addCategory, categories }) {
             title: formData.title,
             description: formData.description || '',
             color: formData.color,
-            icon: ''
+            icon: formData.icon
         });
 
         setFormData({
             title: '',
             description: '',
-            color: 'orange'
+            color: 'orange',
+            icon: 'home'
         });
     };
+
+    function getIconComponent(iconName) {
+        const iconMap = {
+            'home': faHome,
+            'work': faBriefcase,
+            'education': faGraduationCap,
+            'health': faHeartPulse,
+            'food': faUtensils,
+            'shopping': faShoppingCart,
+            'travel': faPlane,
+            'fitness': faDumbbell,
+            'event': faCalendarCheck,
+            'finance': faCoins
+        };
+
+        return iconName && iconMap[iconName] ? (
+            <FontAwesomeIcon icon={iconMap[iconName]} className="category-icon" />
+        ) : null;
+    }
 
     return (
         <div className="category-management">
@@ -64,19 +113,6 @@ function CategoryForm({ addCategory, categories }) {
                         className="category-input"
                         required
                         minLength={3}
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="description">Description (optionnelle):</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        placeholder="Description de la catégorie..."
-                        className="category-textarea"
-                        rows="2"
                     />
                 </div>
 
@@ -105,30 +141,52 @@ function CategoryForm({ addCategory, categories }) {
                     </div>
                 </div>
 
+                <div className="form-group">
+                    <label htmlFor="description">Description (optionnelle):</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        placeholder="Description de la catégorie..."
+                        className="category-textarea"
+                        rows="2"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="icon">Pictogramme (optionnel):</label>
+                    <div className="icon-selector">
+                        {iconOptions.map(option => (
+                            <label key={option.value} className="icon-option tooltip-container">
+                                <input
+                                    type="radio"
+                                    name="icon"
+                                    value={option.value}
+                                    checked={formData.icon === option.value}
+                                    onChange={handleChange}
+                                />
+                                <span className="icon-preview">
+                                    <FontAwesomeIcon icon={option.icon} />
+                                </span>
+                                <span className="tooltip-text">{option.label}</span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
                 <button type="submit" className="category-button">Ajouter la catégorie</button>
             </form>
 
             <div className="category-list">
                 <h3>Catégories existantes</h3>
-                {categories.length === 0 ? (
-                    <p>Aucune catégorie définie</p>
-                ) : (
-                    <ul className="categories">
-                        {categories.map(category => (
-                            <li key={category.id} className="category-item">
-                                  <span
-                                      className="category-badge tooltip-container"
-                                      style={getCategoryStyle(category.color)}
-                                      title={category.description || "Aucune description"}
-                                  >
-                                    {category.title}
-                                      {category.description && <span className="tooltip-text">{category.description}</span>}
-                                  </span>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                <CategoryList
+                    categories={categories}
+                    isCheckable={false}
+                    emptyMessage="Aucune catégorie définie"
+                />
             </div>
+
         </div>
     );
 }

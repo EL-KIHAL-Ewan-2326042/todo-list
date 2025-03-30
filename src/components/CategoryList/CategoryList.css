@@ -1,0 +1,37 @@
+.categories-list-container {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.category-list-item {
+    display: inline-flex;
+    margin: 0;
+}
+
+.empty-categories {
+    color: #888;
+    font-style: italic;
+    padding: 10px 0;
+}
+
+.more-categories-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: #e0e0e0;
+    color: #333;
+    font-weight: normal;
+}
+
+.todo-categories {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}

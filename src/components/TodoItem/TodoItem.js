@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import ConfirmModal from './ConfirmModal';
-import { isTaskExpiredMoreThanWeek, isTaskApproachingDeadline, isTaskRecentlyExpired } from '../utils/dateUtils';
+import ConfirmModal from '../modals/ConfirmModal/ConfirmModal';
+import { isTaskExpiredMoreThanWeek, isTaskApproachingDeadline, isTaskRecentlyExpired } from '../../utils/dateUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassEmpty } from '@fortawesome/free-solid-svg-icons';
-import { getCategoryStyle } from '../utils/colorUtils';
+import { getCategoryStyle } from '../../utils/colorUtils';
+import './TodoItem.css';
+import CategoryItem from '../CategoryItem/CategoryItem';
+import CategoryList from '../CategoryList/CategoryList';
 
 function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
     const [showDetails, setShowDetails] = useState(false);
@@ -68,6 +71,12 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
         return {};
     };
 
+    const shouldShowDetailsButton = () => {
+        return todo.date_echeance || todo.description || (categories && categories.length > 2);
+    };
+
+    const visibleCategories = categories && categories.length > 0 ? categories.slice(0, 2) : [];
+    const hasMoreCategories = categories && categories.length > 2;
 
     return (
         <li className={`todo-item ${todo.done ? 'completed' : ''}`}>
@@ -85,8 +94,8 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
 
                 {todo.urgent && (
                     <span className="todo-tag urgent-tag">
-            ⚠️ Urgent
-          </span>
+                        ⚠️ Urgent
+                    </span>
                 )}
 
                 {todo.urgent && todo.date_echeance && (
@@ -124,27 +133,28 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
 
                 {categories && categories.length > 0 && (
                     <div className="todo-categories">
-                        {categories.map(category => (
-                            <span
-                                key={category.id}
-                                className="todo-tag tooltip-container"
-                                style={getCategoryStyle(category.color)}
-                                title={category.description || "Aucune description"}
-                            >
-                            {category.title}
-                                {category.description && (
-                                    <span className="tooltip-text">{category.description}</span>
-                                )}
-                        </span>
-                        ))}
+                        {visibleCategories.length > 0 && (
+                            <CategoryList
+                                categories={visibleCategories}
+                                isCheckable={false}
+                                className="inline-category-list"
+                            />
+                        )}
+                        {hasMoreCategories && (
+                            <li className="category-list-item">
+                                <span className="more-categories-badge">
+                                    +{categories.length - 2}
+                                </span>
+                            </li>
+                        )}
                     </div>
                 )}
 
-                {(categories && categories.length > 0) && (
+                {(visibleCategories.length > 0) && (
                     <span className="todo-separator">|</span>
                 )}
 
-                {todo.date_echeance ? (
+                {shouldShowDetailsButton() ? (
                     <button
                         className="todo-action-button todo-details-button"
                         onClick={toggleDetails}
@@ -174,9 +184,8 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
                 </button>
             </div>
 
-            {showDetails && todo.date_echeance && (
+            {showDetails && shouldShowDetailsButton() && (
                 <div className={`todo-details ${showDetails ? 'show' : ''}`}>
-
                     {todo.date_creation && (
                         <div className="todo-deadline">
                             <h4>Date de création</h4>
@@ -191,6 +200,15 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
                         </div>
                     )}
 
+                    {categories && categories.length > 0 && (
+                        <div className="todo-all-categories">
+                            <h4>Ensemble des catégories</h4>
+                            <CategoryList
+                                categories={categories}
+                                isCheckable={false}
+                            />
+                        </div>
+                    )}
 
                     {todo.contacts && todo.contacts.length > 0 && (
                         <div className="todo-contacts">
