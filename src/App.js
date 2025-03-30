@@ -20,6 +20,7 @@ import HelpMenu from './components/modals/HelpMenu/HelpMenu';
 import { isTaskExpiredMoreThanWeek } from './utils/dateUtils';
 
 import ActiveFilters from './components/ActiveFilters/ActiveFilters';
+import CalendarView from "./components/CalendarView/CalendarView";
 
 
 export const DEFAULT_SORT = 'dueDate';
@@ -62,6 +63,8 @@ function App() {
   const [showAllTasks, setShowAllTasks] = useState(false);
   const [showConfirmAllTasks, setShowConfirmAllTasks] = useState(false);
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [showCalendarView, setShowCalendarView] = useState(false);
+  const [selectedDateTasks, setSelectedDateTasks] = useState(null);
 
   const toggleFilterStatus = () => {
     if (filter.status === 'all') {
@@ -420,10 +423,28 @@ function App() {
     }
   };
 
+  const handleRemoveCategory = (categoryId) => {
+    setFilter({
+      ...filter,
+      selectedCategories: filter.selectedCategories.filter(id => id !== categoryId)
+    });
+  };
+
   return (
       <div className="App">
         <header className="App-header">
           <h1>Ma To-Do List ✅</h1>
+
+          <div className="app-title-container">
+            <h1>Ma To-Do List ✅</h1>
+            <button
+                className="calendar-view-btn"
+                onClick={() => setShowCalendarView(!showCalendarView)}
+                title={showCalendarView ? "Vue liste" : "Vue calendrier"}
+            >
+              {showCalendarView ? "📋" : "📅"}
+            </button>
+          </div>
 
           <div className="form-mode-toggle">
             <button
@@ -457,40 +478,71 @@ function App() {
           </div>
 
           <div className="todo-container">
-            <ActiveFilters
-                filter={filter}
-                searchQuery={searchQuery}
-                activeFilter={activeFilter}
-                categories={data.categories}
-                onClearFilters={clearFilters}
-                removeContact={removeSelectedContact}
-            />
             {formMode === 'task' ? (
                 <>
-                  <TodoList
-                      tasks={filteredTasks}
-                      toggleTask={(id) => {
-                        setData(prev => ({
-                          ...prev,
-                          taches: prev.taches.map(t =>
-                              t.id === id ? { ...t, done: !t.done } : t
-                          )
-                        }));
-                      }}
-                      deleteTask={(id) => {
-                        setData(prev => ({
-                          ...prev,
-                          taches: prev.taches.filter(t => t.id !== id),
-                          relations: prev.relations.filter(r => r.tache !== id)
-                        }));
-                      }}
-                      updateTask={updateTask}
-                      allCategories={data.categories}
-                      getCategories={getTaskCategories}
-                      onCategoryClick={handleCategoryClick}
-                      onContactClick={handleContactClick}
-                      onUpdateCategories={updateTaskCategories}
-                  />
+                  {showCalendarView ? (
+                      <CalendarView
+                          tasks={filteredTasks}
+                          toggleTask={(id) => {
+                            setData(prev => ({
+                              ...prev,
+                              taches: prev.taches.map(t =>
+                                  t.id === id ? { ...t, done: !t.done } : t
+                              )
+                            }));
+                          }}
+                          deleteTask={(id) => {
+                            setData(prev => ({
+                              ...prev,
+                              taches: prev.taches.filter(t => t.id !== id),
+                              relations: prev.relations.filter(r => r.tache !== id)
+                            }));
+                          }}
+                          updateTask={updateTask}
+                          getCategories={getTaskCategories}
+                          allCategories={data.categories}
+                          onCategoryClick={handleCategoryClick}
+                          onContactClick={handleContactClick}
+                          onUpdateCategories={updateTaskCategories}
+                      />
+                  ) : (
+                      <>
+                        <ActiveFilters
+                            filter={filter}
+                            searchQuery={searchQuery}
+                            activeFilter={activeFilter}
+                            clearFilters={clearFilters}
+                            categories={data.categories}
+                            onRemoveCategory={handleRemoveCategory}
+                            onRemoveContact={removeSelectedContact}
+                        />
+
+                        <TodoList
+                            tasks={filteredTasks}
+                            toggleTask={(id) => {
+                              setData(prev => ({
+                                ...prev,
+                                taches: prev.taches.map(t =>
+                                    t.id === id ? { ...t, done: !t.done } : t
+                                )
+                              }));
+                            }}
+                            deleteTask={(id) => {
+                              setData(prev => ({
+                                ...prev,
+                                taches: prev.taches.filter(t => t.id !== id),
+                                relations: prev.relations.filter(r => r.tache !== id)
+                              }));
+                            }}
+                            updateTask={updateTask}
+                            getCategories={getTaskCategories}
+                            allCategories={data.categories}
+                            onCategoryClick={handleCategoryClick}
+                            onContactClick={handleContactClick}
+                            onUpdateCategories={updateTaskCategories}
+                        />
+                      </>
+                  )}
                 </>
             ) : (
                 <CategoryForm addCategory={handleAddCategory} categories={data.categories} />

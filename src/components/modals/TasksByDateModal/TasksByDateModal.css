@@ -1,0 +1,97 @@
+.tasks-by-date-modal {
+    background-color: white;
+    width: 95%;
+    max-width: 1000px; /* Augmenté de 800px à 1000px */
+    min-height: 400px;
+    max-height: 90vh; /* Augmenté de 80vh à 90vh */
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4); /* Ombre plus prononcée */
+    overflow-y: auto;
+    transform: scale(0.98);
+    opacity: 0;
+    animation: popup-appear 0.3s forwards;
+    position: relative;
+    z-index: 1050; /* Z-index plus élevé pour s'assurer qu'il est au-dessus de tout */
+}
+
+.tasks-by-date-modal .modal-header {
+    background-color: #4caf50;
+    padding: 18px 25px; /* Padding augmenté */
+    color: white;
+    border-radius: 12px 12px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tasks-by-date-modal .modal-header h3 {
+    margin: 0;
+    font-size: 22px; /* Taille augmentée */
+    font-weight: 500;
+}
+
+.tasks-by-date-modal .modal-close {
+    position: relative;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px; /* Taille augmentée */
+    cursor: pointer;
+    width: 40px; /* Taille augmentée */
+    height: 40px; /* Taille augmentée */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.tasks-by-date-modal .modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tasks-by-date-modal .modal-body {
+    padding: 25px; /* Padding augmenté */
+    max-height: calc(90vh - 80px);
+    overflow-y: auto;
+}
+
+.no-tasks-message {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 40px 0; /* Padding augmenté */
+    font-size: 16px;
+}
+
+/* Styles améliorés pour la liste des tâches */
+.tasks-by-date-modal .todo-list {
+    max-height: none;
+    overflow: visible;
+}
+
+.tasks-by-date-modal .todo-item {
+    padding: 15px; /* Padding augmenté */
+    margin-bottom: 15px; /* Marge augmentée */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tasks-by-date-modal .todo-item:last-child {
+    border-bottom: none;
+}
+
+/* Animation améliorée */
+@keyframes popup-appear {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
