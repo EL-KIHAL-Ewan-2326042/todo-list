@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CategoryForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -7,13 +7,25 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { getCategoryBackgroundColor } from '../../utils/colorUtils';
 
-function AddCategory({ addCategory }) {
+function AddCategory({ addCategory, isEditing = false, categoryToEdit = null, onCancel = null }) {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         color: 'orange',
         icon: 'home'
     });
+
+    useEffect(() => {
+        if (isEditing && categoryToEdit) {
+            setFormData({
+                title: categoryToEdit.title || '',
+                description: categoryToEdit.description || '',
+                color: categoryToEdit.color || 'orange',
+                icon: categoryToEdit.icon || 'home',
+                id: categoryToEdit.id
+            });
+        }
+    }, [isEditing, categoryToEdit]);
 
     const colorOptions = [
         { value: 'orange', label: 'Orange' },
@@ -54,18 +66,22 @@ function AddCategory({ addCategory }) {
         if (!formData.title.trim() || formData.title.trim().length < 3) return;
 
         addCategory({
-            title: formData.title,
-            description: formData.description || '',
-            color: formData.color,
-            icon: formData.icon
+            ...formData,
+            description: formData.description || ''
         });
 
-        setFormData({
-            title: '',
-            description: '',
-            color: 'orange',
-            icon: 'home'
-        });
+        if (!isEditing) {
+            // Reset form only when adding, not editing
+            setFormData({
+                title: '',
+                description: '',
+                color: 'orange',
+                icon: 'home'
+            });
+        } else if (onCancel) {
+            // Close modal when editing
+            onCancel();
+        }
     };
 
     return (
@@ -145,7 +161,16 @@ function AddCategory({ addCategory }) {
                     </div>
                 </div>
 
-                <button type="submit" className="category-button">Ajouter la catégorie</button>
+                <div className="form-buttons">
+                    {isEditing && (
+                        <button type="button" className="category-button cancel" onClick={onCancel}>
+                            Annuler
+                        </button>
+                    )}
+                    <button type="submit" className="category-button">
+                        {isEditing ? 'Modifier la catégorie' : 'Ajouter la catégorie'}
+                    </button>
+                </div>
             </form>
         </div>
     );

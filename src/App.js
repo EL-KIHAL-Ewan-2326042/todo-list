@@ -287,6 +287,25 @@ function App() {
     }
   };
 
+  const updateTask = (updatedTask) => {
+    setData(prev => ({
+      ...prev,
+      taches: prev.taches.map(t =>
+          t.id === updatedTask.id ? {...updatedTask} : t
+      ),
+      relations: prev.relations.filter(r => r.tache !== updatedTask.id)
+    }));
+
+    if (updatedTask.selectedCategories && updatedTask.selectedCategories.length > 0) {
+      updatedTask.selectedCategories.forEach(categoryId => {
+        setData(prev => ({
+          ...prev,
+          relations: [...prev.relations, { tache: updatedTask.id, categorie: categoryId }]
+        }));
+      });
+    }
+  };
+
   return (
       <div className="App">
         <header className="App-header">
@@ -343,6 +362,8 @@ function App() {
                           relations: prev.relations.filter(r => r.tache !== id)
                         }));
                       }}
+                      updateTask={updateTask}
+                      allCategories={data.categories}
                       getCategories={getTaskCategories}
                   />
                 </>

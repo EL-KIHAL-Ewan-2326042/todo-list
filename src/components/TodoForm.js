@@ -3,19 +3,19 @@ import DatePicker from './DatePicker/DatePicker';
 import CategoryItem from './CategoryItem/CategoryItem';
 import CategoryList from './CategoryList/CategoryList';
 
-function TodoForm({ addTodo, categories }) {
+function TodoForm({ addTodo, categories, initialValues = null, submitLabel = "Ajouter" }) {
     const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        date_creation: formatDateToDisplay(new Date()),
-        date_echeance: '',
-        done: false,
-        urgent: false,
-        contacts: [],
-        selectedCategories: []
+        title: initialValues?.title || '',
+        description: initialValues?.description || '',
+        date_creation: initialValues?.date_creation || formatDateToDisplay(new Date()),
+        date_echeance: initialValues?.date_echeance || '',
+        done: initialValues?.done || false,
+        urgent: initialValues?.urgent || false,
+        contacts: initialValues?.contacts || [],
+        selectedCategories: initialValues?.selectedCategories || []
     });
 
-    const [showDetails, setShowDetails] = useState(false);
+    const [showDetails, setShowDetails] = useState(!!initialValues);
 
     function formatDateToDisplay(dateString) {
         if (!dateString) return '';
@@ -103,7 +103,7 @@ function TodoForm({ addTodo, categories }) {
                 >
                     {showDetails ? '▲' : '▼'}
                 </button>
-                <button type="submit" className="todo-button">Ajouter</button>
+                <button type="submit" className="todo-button">{submitLabel}</button>
             </div>
 
             <div className={`todo-form-details ${showDetails ? 'show' : ''}`}>

@@ -7,10 +7,12 @@ import { getCategoryStyle } from '../../utils/colorUtils';
 import './TodoItem.css';
 import CategoryItem from '../CategoryItem/CategoryItem';
 import CategoryList from '../CategoryList/CategoryList';
+import EditTaskModal from '../modals/EditTaskModal/EditTaskModal';
 
-function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
+function TodoItem({ todo, toggleTodo, deleteTask, updateTask, categories }) {
     const [showDetails, setShowDetails] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     const handleToggle = () => {
         toggleTodo(todo.id);
@@ -18,16 +20,25 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
 
     const handleDelete = (e) => {
         e.stopPropagation();
-        setShowModal(true);
+        setShowDeleteModal(true);
     };
 
-    const handleEdit = () => {
-        console.log('Pas encore implémenté');
-    }
+    const handleEdit = (e) => {
+        e.stopPropagation();
+        setShowEditModal(true);
+    };
 
     const confirmDelete = () => {
         deleteTask(todo.id);
-        setShowModal(false);
+        setShowDeleteModal(false);
+    };
+
+    const handleUpdateTask = (updatedTodo) => {
+        updateTask({
+            ...updatedTodo,
+            id: todo.id
+        });
+        setShowEditModal(false);
     };
 
     const toggleDetails = () => {
@@ -154,24 +165,27 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
                     <span className="todo-separator">|</span>
                 )}
 
-                {shouldShowDetailsButton() ? (
-                    <button
-                        className="todo-action-button todo-details-button"
-                        onClick={toggleDetails}
-                        aria-label="Détails"
-                    >
-                        {showDetails ? "▲" : "▼"}
-                    </button>
-                ) : (
-                    <button
-                        className="todo-action-button todo-edit-icon"
-                        onClick={handleEdit}
-                        aria-label="Modifier"
-                        title="Modifier la tâche"
-                    >
-                        ✏️
-                    </button>
+                {shouldShowDetailsButton() && (
+                    <>
+                        <button
+                            className="todo-action-button todo-details-button"
+                            onClick={toggleDetails}
+                            aria-label="Détails"
+                        >
+                            {showDetails ? "▲" : "▼"}
+                        </button>
+                        <span className="todo-separator">|</span>
+                    </>
                 )}
+
+                <button
+                    className="todo-action-button todo-edit-icon"
+                    onClick={handleEdit}
+                    aria-label="Modifier"
+                    title="Modifier la tâche"
+                >
+                    ✏️
+                </button>
 
                 <span className="todo-separator">|</span>
 
@@ -224,12 +238,28 @@ function TodoItem({ todo, toggleTodo, deleteTask, categories }) {
             )}
 
             <ConfirmModal
-                isOpen={showModal}
+                isOpen={showDeleteModal}
                 title="Confirmer la suppression"
                 message={`Êtes-vous sûr de vouloir supprimer la tâche "${todo.title}" ?`}
                 onConfirm={confirmDelete}
-                onCancel={() => setShowModal(false)}
+                onCancel={() => setShowDeleteModal(false)}
+                />
+
+            <EditTaskModal
+                isOpen={showEditModal}
+                todo={{
+                    ...todo,
+                    selectedCategories: categories ? categories.map(c => c.id) : []
+                }}
+                categories={categories}
+                onUpdate={handleUpdateTask}
+                onDelete={(id) => {
+                    setShowEditModal(false);
+                    setShowDeleteModal(true);
+                }}
+                onClose={() => setShowEditModal(false)}
             />
+
         </li>
     );
 }

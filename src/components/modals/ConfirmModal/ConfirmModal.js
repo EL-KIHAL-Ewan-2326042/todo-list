@@ -1,11 +1,12 @@
 import React from 'react';
 import './ConfirmModal.css';
+import Modal from '../modal';
 
 function ConfirmModal({ isOpen, title, message, onConfirm, onCancel }) {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
+        <Modal isOpen={isOpen}>
             <div className="modal-container">
                 <div className="modal-header">
                     <h3>{title}</h3>
@@ -19,7 +20,7 @@ function ConfirmModal({ isOpen, title, message, onConfirm, onCancel }) {
                     <button className="modal-btn confirm-btn" onClick={onConfirm}>Confirmer</button>
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 }
 

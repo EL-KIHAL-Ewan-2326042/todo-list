@@ -1,29 +1,34 @@
 import React from 'react';
-import CategoryItem from '../CategoryItem/CategoryItem';
 import './CategoryList.css';
+import CategoryItem from '../CategoryItem/CategoryItem';
 
-function CategoryList({
-                          categories,
-                          isCheckable = false,
-                          selectedCategories = [],
-                          onCategoryToggle = null,
-                          emptyMessage = "Aucune catégorie à afficher",
-                          className = ""
-                      }) {
+function CategoryList({ categories, selectedCategoryIds, toggleCategory, isCheckable = true, emptyMessage = "Aucune catégorie", onCategoryClick }) {
     if (!categories || categories.length === 0) {
         return <div className="empty-categories">{emptyMessage}</div>;
     }
 
     return (
-        <ul className={`categories-list-container ${className}`}>
+        <ul className="categories-list-container">
             {categories.map(category => (
                 <li key={category.id} className="category-list-item">
-                    <CategoryItem
-                        category={category}
-                        isCheckable={isCheckable}
-                        isChecked={selectedCategories.includes(category.id)}
-                        onChange={onCategoryToggle}
-                    />
+                    {isCheckable ? (
+                        <CategoryItem
+                            category={category}
+                            isSelected={selectedCategoryIds?.includes(category.id)}
+                            onToggle={() => toggleCategory(category.id)}
+                            isCheckable={true}
+                        />
+                    ) : (
+                        <div
+                            onClick={() => onCategoryClick && onCategoryClick(category)}
+                            className="clickable-category"
+                        >
+                            <CategoryItem
+                                category={category}
+                                isCheckable={false}
+                            />
+                        </div>
+                    )}
                 </li>
             ))}
         </ul>

@@ -29,7 +29,7 @@
 .color-selector {
     display: flex;
     flex-flow: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
@@ -133,7 +133,7 @@
 .icon-selector {
     display: flex;
     flex-flow: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     margin-top: 5px;
@@ -249,4 +249,79 @@
         opacity: 1;
         transform: translateX(0);
     }
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.category-button.cancel {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.edit-btn {
+    background-color: #2196f3;
+    color: white;
+}
+
+.clickable-category {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.clickable-category:hover {
+    transform: translateY(-2px);
+}
+
+.edit-category-modal {
+    max-width: 600px;
+    width: 90%;
+}
+
+.modal-body .add-category-container {
+    padding: 0;
+}
+
+.modal-body .category-button {
+    margin-top: 10px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.message.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-left: 4px solid #2e7d32;
+}
+
+.message.error {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border-left: 4px solid #d32f2f;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-container {
+    position: relative;
+    z-index: 10000;
 }

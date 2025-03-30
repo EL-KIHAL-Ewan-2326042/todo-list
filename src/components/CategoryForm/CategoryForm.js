@@ -3,8 +3,13 @@ import './CategoryForm.css';
 import AddCategory from './AddCategory';
 import ModifyCategory from './ModifyCategory';
 
-function CategoryForm({ addCategory, categories }) {
+function CategoryForm({ addCategory, categories, updateCategory, deleteCategory }) {
     const [activeTab, setActiveTab] = useState('add');
+
+    const handleAddCategory = (category) => {
+        addCategory(category);
+        setActiveTab('modify');
+    };
 
     return (
         <div className="category-management">
@@ -26,13 +31,17 @@ function CategoryForm({ addCategory, categories }) {
             <div className="tab-content-container">
                 {activeTab === 'add' && (
                     <div className="tab-content active">
-                        <AddCategory addCategory={addCategory} />
+                        <AddCategory addCategory={handleAddCategory} />
                     </div>
                 )}
 
                 {activeTab === 'modify' && (
                     <div className="tab-content active">
-                        <ModifyCategory categories={categories} />
+                        <ModifyCategory
+                            categories={categories}
+                            updateCategory={updateCategory}
+                            deleteCategory={deleteCategory}
+                        />
                     </div>
                 )}
             </div>
